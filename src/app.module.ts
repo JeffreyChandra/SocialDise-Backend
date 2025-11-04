@@ -1,19 +1,17 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { DeepfakeModule } from './deepfake/deepfake.module';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
+
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: process.env.POSTGRES_HOST || 'localhost',
-      port: parseInt(process.env.POSTGRES_PORT || '5432', 10),
-      username: process.env.POSTGRES_USER || 'myuser',
-      password: process.env.POSTGRES_PASSWORD || 'mypassword',
-      database: process.env.POSTGRES_DB || 'mydb',
-      autoLoadEntities: true,
-      synchronize: true,
+    ConfigModule.forRoot({
+      isGlobal: true,
     }),
+    CloudinaryModule,
+    DeepfakeModule,
   ],
   controllers: [AppController],
   providers: [AppService],
