@@ -1,4 +1,4 @@
-// src/user/user.entity.ts (Diperbaiki)
+// src/user/user.entity.ts (Perbaikan Final)
 
 import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert } from 'typeorm';
 import * as bcrypt from 'bcrypt';
@@ -17,10 +17,12 @@ export class User {
   @Column()
   password: string;
 
-  @Column() 
-  followers: number; 
+  // PERBAIKAN: Set default count ke 0 agar data lama tidak NULL
+  @Column({ default: 0 }) 
+  followers: number;
 
-  @Column()
+  // PERBAIKAN: Set default count ke 0 agar data lama tidak NULL
+  @Column({ default: 0 })
   following: number;
 
   @BeforeInsert()
