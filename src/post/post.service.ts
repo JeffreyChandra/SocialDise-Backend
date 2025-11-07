@@ -19,17 +19,29 @@ export class PostService {
   }
 
   findAll(): Promise<Post[]> {
-    return this.postsRepository.find({ relations: ['comments'] }); 
+    return this.postsRepository.find({ 
+        // Muat relasi 'user' dan 'comments'
+        relations: ['user', 'comments'] 
+    }); 
   }
 
+  // **R - Read One**
   async findOne(id: number): Promise<Post> {
     const post = await this.postsRepository.findOne({ 
         where: { id },
-        relations: ['comments'],
+        // Muat relasi 'user' dan 'comments'
+        relations: ['user', 'comments'], 
     });
+    
     if (!post) {
-      throw new NotFoundException(`Postingan ID ${id} tidak ditemukan.`);
+      throw new NotFoundException(`Postingan dengan ID ${id} tidak ditemukan.`);
     }
+    
+    // Opsional: Hapus password user sebelum dikembalikan jika user dimuat
+    if (post.user && 'password' in post.user) {
+        delete (post.user as any).password;
+    }
+    
     return post;
   }
 
