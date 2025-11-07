@@ -1,5 +1,4 @@
 // src/post/post.service.ts
-
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -14,66 +13,56 @@ export class PostService {
     private postsRepository: Repository<Post>,
   ) {}
 
-  // **C - Create**
-  async create(createPostDto: CreatePostDto): Promise<Post> {
-    const newPost = this.postsRepository.create(createPostDto);
+  async create(createPostDto: CreatePostDto, userId: number): Promise<Post> {
+    const newPost = this.postsRepository.create({
+        ...createPostDto,
+        userId: userId,
+    });
     return this.postsRepository.save(newPost);
   }
 
-  // **R - Read All**
   findAll(): Promise<Post[]> {
-    // Relasi 'comments' akan dimuat bersama postingan
-    return this.postsRepository.find({ 
-        relations: ['comments'] 
-    }); 
+    return this.postsRepository.find({ relations: ['comments'] }); 
   }
-  async addLike(id: number): Promise<Post> {
-    const post = await this.postsRepository.findOne({ where: { id } });
-    
-    if (!post) {
-      throw new NotFoundException(`Postingan dengan ID ${id} tidak ditemukan.`);
-    }
 
-    // Tambahkan 1 ke likesCount
-    post.likesCount += 1;
-    
-    // Simpan perubahan ke database
-    return this.postsRepository.save(post);
-}
-
-  // **R - Read One**
   async findOne(id: number): Promise<Post> {
     const post = await this.postsRepository.findOne({ 
         where: { id },
-        relations: ['comments'], // Muat komentar juga
+        relations: ['comments'],
     });
-    
     if (!post) {
-      throw new NotFoundException(`Postingan dengan ID ${id} tidak ditemukan.`);
+      throw new NotFoundException(`Postingan ID ${id} tidak ditemukan.`);
     }
     return post;
   }
 
-  // **U - Update**
   async update(id: number, updateData: UpdatePostDto): Promise<Post> {
-    const post = await this.findOne(id); // Memastikan post ada
-    
-    // TypeORM update/save
+    const post = await this.findOne(id);
     Object.assign(post, updateData); 
-    
     return this.postsRepository.save(post);
   }
 
-  // **D - Delete**
-  async remove(id: number): Promise<{ deleted: true; id: number }> {
+  async remove(id: number): Promise<void> {
     const result = await this.postsRepository.delete(id);
     if (result.affected === 0) {
-      throw new NotFoundException(`Postingan dengan ID ${id} tidak ditemukan.`);
+      throw new NotFoundException(`Postingan ID ${id} tidak ditemukan.`);
     }
-    // Karena kita menggunakan cascade: true di Post.entity.ts, 
-    // semua komentar yang terkait akan otomatis terhapus (PostgreSQL/TypeORM yang menangani).
-    return { deleted: true, id };
   }
-
   
+  // FITUR LIKE
+  async addLike(id: number): Promise<Post> {
+    // Alternatif efisien: gunakan increment, lalu ambil data baru
+    await this.postsRepository.increment({ id }, 'likesCount', 1);
+    return this.findOne(id);
+  }
 }
+
+// src/post/post.service.ts (Modifikasi Metode Create)
+
+// ... import dan constructor ...
+
+  // **C - Create**
+  // Menerima userId dari token yang diverifikasi
+  
+
+// ... metode findAll, findOne, update, remove, addLike ...

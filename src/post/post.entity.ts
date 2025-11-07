@@ -1,7 +1,9 @@
 // src/post/post.entity.ts
 
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
 import { Comment } from '../comment/comment.entity';
+// Import User Entity Anda
+// import { User } from '../user/user.entity'; 
 
 @Entity('posts')
 export class Post {
@@ -14,15 +16,23 @@ export class Post {
   @Column()
   content: string;
 
-  // Kolom Baru untuk Media (Gambar/Video URL)
-  @Column({ nullable: true }) // Izinkan postingan tanpa media
+  @Column({ nullable: true })
   mediaUrl: string; 
 
-  // Kolom Baru untuk Jumlah Like
-  @Column({ default: 0 }) 
+  @Column({ default: 0 })
   likesCount: number;
+  
+  // KOLOM BARU UNTUK USER ID
+  @Column()
+  userId: number; // ID Pengguna yang membuat postingan
+  
+  /*
+  // RELASI KE USER (Hapus komentar jika User Entity Anda ada dan diimpor)
+  @ManyToOne(() => User, user => user.posts)
+  @JoinColumn({ name: 'userId' })
+  user: User;
+  */
 
-  // Relasi: Satu Post memiliki Banyak Comment
   @OneToMany(() => Comment, comment => comment.post, { 
     cascade: true, 
   })

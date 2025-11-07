@@ -9,11 +9,11 @@ export class AuthController {
   // Endpoint: POST /auth/register
   @Post('register')
   async register(@Body() body: any) {
-    const { email, password } = body;
-    if (!email ||!password) {
-        return { message: 'Email dan password harus diisi.' };
+    const { email, name, password } = body;
+    if (!email || !name||!password) {
+        return { message: 'Email, Name dan password harus diisi.' };
     }
-    const user = await this.authService.register(email, password);
+    const user = await this.authService.register(email, name, password);
     const { password: userPass, ...result } = user;
     return result;
   }

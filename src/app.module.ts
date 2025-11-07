@@ -1,26 +1,24 @@
-// app.module.ts
+// src/app.module.ts
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
+import { CommentModule } from './comment/comment.module';
+import { PostModule } from './post/post.module';
 import * as fs from 'fs';
 
 @Module({
   imports: [
-    // 1. Konfigurasi Variabel Lingkungan
     ConfigModule.forRoot({
       isGlobal: true, 
     }),
     
-    // 2. Konfigurasi TypeORM
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => {
-        // Baca Sertifikat CA
         const caCertPath = configService.get<string>('POSTGRES_SSL_CA_PATH');
         const ca = caCertPath ? fs.readFileSync(caCertPath).toString() : undefined;
 
-        // Opsi Koneksi
         return {
           type: 'postgres',
           host: configService.get<string>('POSTGRES_HOST'),
@@ -29,9 +27,8 @@ import * as fs from 'fs';
           password: configService.get<string>('POSTGRES_PASSWORD'),
           database: configService.get<string>('POSTGRES_DATABASE'),
           entities: [__dirname + '/**/*.entity{.ts,.js}'], 
-          synchronize: true,
+          synchronize: true, // Hati-hati di production!
           
-          // PENTING: Pengaturan SSL untuk Aiven
           ssl: ca ? {
             rejectUnauthorized: true, 
             ca: ca, 
@@ -41,9 +38,11 @@ import * as fs from 'fs';
       inject: [ConfigService],
     }),
     
+    PostModule,     // Modul Postingan
+    CommentModule,  // Modul Komentar
     AuthModule,
-    // ... modul lain
   ],
-  // ...
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
