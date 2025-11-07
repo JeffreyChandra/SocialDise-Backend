@@ -27,10 +27,9 @@ export class AuthService {
 
   // --- LOGIN: Validasi Kredensial (Diperbaiki) ---
   async validateUser(email: string, pass: string): Promise<User | null> {
-    // 1. Ambil user dengan SEMUA kolom yang dibutuhkan, termasuk password
     const user = await this.usersRepository.findOne({ 
         where: { email },
-        // Pastikan kolom 'password', 'followers', dan 'following' di-load
+        // Baris ini sekarang valid
         select: ['id', 'email', 'name', 'password', 'followers', 'following'] 
     });
     
