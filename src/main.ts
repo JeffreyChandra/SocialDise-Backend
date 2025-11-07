@@ -10,7 +10,7 @@ async function bootstrap() {
   // 1. Tambahkan Konfigurasi CORS
   app.enableCors({
     // Ganti dengan port lokal frontend Anda yang sebenarnya!
-    origin: 'http://localhost:3000', 
+    origin: 'http://localhost:3001', 
     
     // Atau, untuk mengizinkan SEMUA origin (HANYA UNTUK DEVELOPMENT LOKAL!):
     // origin: '*', 
@@ -27,7 +27,8 @@ async function bootstrap() {
   
   // Jika Anda memiliki prefix global, aktifkan di sini:
   // app.setGlobalPrefix('api/v1'); 
-
-  await app.listen(3000); // Atau port server backend Anda yang sebenarnya
+  const port = process.env.PORT || 3000;
+  await app.listen(port);
+  console.log(`Application is listening on port ${port}`);
 }
 bootstrap();
