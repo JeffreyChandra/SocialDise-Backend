@@ -15,7 +15,7 @@ export class DeepfakeController {
   constructor(private readonly deepfakeService: DeepfakeService) {}
 
   @Post('detect')
-  @UseInterceptors(FileInterceptor('mediaFile'))
+  @UseInterceptors(FileInterceptor('media'))
   async detectMedia(
     @UploadedFile(
       new ParseFilePipe({
