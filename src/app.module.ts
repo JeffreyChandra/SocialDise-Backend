@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { CommentModule } from './comment/comment.module';
 import { PostModule } from './post/post.module';
 import * as fs from 'fs';
+import { DeepfakeModule } from './deepfake/deepfake.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import * as fs from 'fs';
     PostModule,     // Modul Postingan
     CommentModule,  // Modul Komentar
     AuthModule,
+    DeepfakeModule,
   ],
   controllers: [],
   providers: [],
