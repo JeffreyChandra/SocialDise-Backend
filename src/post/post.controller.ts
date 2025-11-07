@@ -61,7 +61,7 @@ export class PostController {
   // ------------------------------------
   // Endpoint: POST /posts/by-user
   @Post('by-user')
-  async findPostsByUserId(@Query('userId', ParseIntPipe) userId: number): Promise<PostEntity[]> {
+  async findPostsByUserId(@Body('userId', ParseIntPipe) userId: number): Promise<PostEntity[]> {
 
   
     return this.postService.findAllByUserId(userId);
