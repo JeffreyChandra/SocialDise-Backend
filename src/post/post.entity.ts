@@ -23,7 +23,7 @@ export class Post {
   likesCount: number;
   
   // KOLOM BARU UNTUK USER ID
-  @Column()
+  @Column({ nullable: true })
   userId: number; // ID Pengguna yang membuat postingan
   
   /*
