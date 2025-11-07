@@ -21,7 +21,7 @@ export class Post {
   @Column({ default: 0 }) 
   likesCount: number;
 
-  @Column({ default: 0 }) 
+  @Column({nullable: true}) 
   userId: number; 
   
   // KOLOM BARU: Trusted Score (misalnya 0.00 hingga 1.00)
