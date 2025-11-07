@@ -1,11 +1,14 @@
-// src/post/post.controller.ts (Perbaikan Crash Tanpa AuthGuard)
+// src/post/post.controller.ts
 
-import { Controller, Get, Post, Put, Delete, Body, Param, HttpCode, ParseIntPipe, Req } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, HttpCode, ParseIntPipe, Req, UseGuards } from '@nestjs/common';
 import { PostService } from './post.service';
 import { Post as PostEntity } from './post.entity';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { Request } from 'express'; // Pastikan Request diimpor dari 'express'
+import { Request } from 'express'; 
+
+// Import AuthGuard Anda (Pastikan path ke file jwt-auth.guard.ts Anda benar)
+import { JwtAuthGuard } from '../auth/jwt-auth.guard'; 
 
 // Asumsi Payload JWT Anda
 interface JwtPayload {
@@ -14,32 +17,29 @@ interface JwtPayload {
 }
 
 interface AuthenticatedRequest extends Request {
-    user?: JwtPayload; // <-- Ganti menjadi opsional (?) karena AuthGuard tidak digunakan
+    user: JwtPayload; // <-- 'user' TIDAK lagi opsional karena GUARD diaktifkan
 }
 
 @Controller('posts')
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
-
   // CRUD
+  
+  // AKTIVASI GUARD: Mencegah akses jika tidak ada token valid
+  @UseGuards(JwtAuthGuard) 
   @Post()
   async create(
     @Body() createPostDto: CreatePostDto,
     @Req() req: AuthenticatedRequest, 
   ): Promise<PostEntity> {
     
-    // PERBAIKAN: Gunakan optional chaining (?.) atau operator ||
-    // Jika req.user ada, ambil id-nya. Jika tidak, gunakan ID default (misal: 1).
-    const userId = req.user?.id || 1; // <--- BARIS KRUSIAL DIPERBAIKI
-    
-    // Peringatan: Gunakan ID 1 hanya jika Anda yakin User dengan ID 1 ada di database.
+    // LOGIKA AMAN: ID pengguna (misalnya 7) DIJAMIN ada karena sudah diverifikasi oleh JwtAuthGuard
+    const userId = req.user.id; 
     
     return this.postService.create(createPostDto, userId);
   }
   
-  // ... metode findAll, findOne, update, delete, likePost (tidak ada perubahan) ...
-
   @Get()
   async findAll(): Promise<PostEntity[]> {
     return this.postService.findAll();
@@ -48,6 +48,9 @@ export class PostController {
   async findOne(@Param('id', ParseIntPipe) id: number): Promise<PostEntity> {
     return this.postService.findOne(id);
   }
+  
+  // ... endpoint lain dipertahankan ...
+
   @Put(':id')
   async update(
     @Param('id', ParseIntPipe) id: number, 
@@ -61,7 +64,7 @@ export class PostController {
     await this.postService.remove(id);
   }
   
-  // FITUR LIKE
+  // FITUR LIKE (Biasanya tidak perlu otorisasi, tapi jika perlu, tambahkan @UseGuards)
   @Post(':id/like')
   async likePost(@Param('id', ParseIntPipe) id: number): Promise<PostEntity> {
     return this.postService.addLike(id);
