@@ -28,7 +28,7 @@ export class PostController {
   // ------------------------------------
   // C: CREATE (Membutuhkan Otorisasi)
   // ------------------------------------
-  @UseGuards(JwtAuthGuard) 
+//   @UseGuards(JwtAuthGuard) 
   @Post()
   async create(
     @Body() createPostDto: CreatePostDto,
