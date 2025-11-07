@@ -1,4 +1,4 @@
-// src/post/post.service.ts
+// src/post/post.service.ts (Tidak ada perubahan fungsional)
 
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -31,11 +31,11 @@ export class PostService {
     }); 
   }
 
-  // **R - Read All By User (Khusus)**
+  // **R - Read All By User (Dipanggil oleh Controller)**
   async findAllByUserId(userId: number): Promise<Post[]> {
     return this.postsRepository.find({
       where: { userId: userId },
-      relations: ['user', 'comments'], // Muat data user dan komentar
+      relations: ['user', 'comments'], 
       order: { id: 'DESC' },
     });
   }
@@ -51,7 +51,6 @@ export class PostService {
       throw new NotFoundException(`Postingan dengan ID ${id} tidak ditemukan.`);
     }
     
-    // Hapus password user sebelum dikembalikan
     if (post.user && 'password' in post.user) {
         delete (post.user as any).password;
     }
@@ -59,14 +58,13 @@ export class PostService {
     return post;
   }
 
-  // **U - Update**
+  // ... (Metode update, remove, addLike) ...
   async update(id: number, updateData: UpdatePostDto): Promise<Post> {
     const post = await this.findOne(id);
     Object.assign(post, updateData); 
     return this.postsRepository.save(post);
   }
 
-  // **D - Delete**
   async remove(id: number): Promise<void> {
     const result = await this.postsRepository.delete(id);
     if (result.affected === 0) {
@@ -74,7 +72,6 @@ export class PostService {
     }
   }
   
-  // FITUR LIKE
   async addLike(id: number): Promise<Post> {
     await this.postsRepository.increment({ id }, 'likesCount', 1);
     return this.findOne(id);
