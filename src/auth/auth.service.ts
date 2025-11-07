@@ -31,7 +31,7 @@ export class AuthService {
     // Pastikan user di-load dengan password agar bcrypt.compare bisa bekerja
     const user = await this.usersRepository.findOne({ 
         where: { email },
-        select: ['id', 'email', 'name', 'password'] // <-- Penting: Load kolom password
+        select: ['id', 'email', 'name', 'password', 'followers', 'following'],
     });
     
     if (user && (await bcrypt.compare(pass, user.password))) {
