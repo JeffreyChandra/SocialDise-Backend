@@ -14,10 +14,7 @@ export class PostService {
   ) {}
 
   async create(createPostDto: CreatePostDto, userId: number): Promise<Post> {
-    const newPost = this.postsRepository.create({
-        ...createPostDto,
-        userId: userId,
-    });
+    const newPost = this.postsRepository.create(createPostDto);
     return this.postsRepository.save(newPost);
   }
 

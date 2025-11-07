@@ -2,8 +2,7 @@
 
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
 import { Comment } from '../comment/comment.entity';
-// Import User Entity Anda
-// import { User } from '../user/user.entity'; 
+// import { User } from '../user/user.entity'; // Jika Anda memiliki User Entity
 
 @Entity('posts')
 export class Post {
@@ -19,19 +18,15 @@ export class Post {
   @Column({ nullable: true })
   mediaUrl: string; 
 
-  @Column({ default: 0 })
+  @Column({ default: 0 }) 
   likesCount: number;
+
+  @Column({ default: 0 }) 
+  userId: number; 
   
-  // KOLOM BARU UNTUK USER ID
-  @Column({ nullable: true })
-  userId: number; // ID Pengguna yang membuat postingan
-  
-  /*
-  // RELASI KE USER (Hapus komentar jika User Entity Anda ada dan diimpor)
-  @ManyToOne(() => User, user => user.posts)
-  @JoinColumn({ name: 'userId' })
-  user: User;
-  */
+  // KOLOM BARU: Trusted Score (misalnya 0.00 hingga 1.00)
+  @Column({ type: 'numeric', precision: 3, scale: 2, default: 1.00 })
+  trustedScore: number; // Nilai default 1.00 (atau 100%) jika belum dicek
 
   @OneToMany(() => Comment, comment => comment.post, { 
     cascade: true, 
