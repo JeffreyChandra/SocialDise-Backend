@@ -1,32 +1,46 @@
-// src/auth/auth.controller.ts
-import { Controller, Post, Body, UseGuards, Request } from '@nestjs/common';
+// src/auth/auth.controller.ts (Diperbaiki)
+
+import { Controller, Post, Body, UnauthorizedException, BadRequestException } from '@nestjs/common';
 import { AuthService } from './auth.service';
+
+// --- Asumsi DTO (Anda perlu membuatnya!) ---
+// import { RegisterDto } from './dto/register.dto'; 
+// import { LoginDto } from './dto/login.dto'; 
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) {}
 
-  // Endpoint: POST /auth/register
-  @Post('register')
-  async register(@Body() body: any) {
-    const { email, name, password } = body;
-    if (!email || !name||!password) {
-        return { message: 'Email, Name dan password harus diisi.' };
-    }
-    const user = await this.authService.register(email, name, password);
-    const { password: userPass, ...result } = user;
-    return result;
-  }
+  // Endpoint: POST /auth/register
+  @Post('register')
+  async register(@Body() body: any) {
+    // Di aplikasi nyata, gunakan DTO dengan ValidationPipe untuk validasi ini
+    const { email, name, password } = body;
+    if (!email || !name || !password) {
+      throw new BadRequestException('Email, Nama, dan password harus diisi.');
+    }
+    
+    const user = await this.authService.register(email, name, password);
+    
+    // Bersihkan password dari respons register
+    const { password: userPass, ...result } = user;
+    return result;
+  }
 
-  @Post('login')
-  async login(@Body() body: any) {
-    const { email, password } = body;
-    const user = await this.authService.validateUser(email, password);
+  @Post('login')
+  async login(@Body() body: any) {
+    // Di aplikasi nyata, gunakan LoginDto dengan ValidationPipe
+    const { email, password } = body;
     
-    if (!user) {
-      return { statusCode: 401, message: 'Kredensial tidak valid' };
-    }
-    
-    return this.authService.login(user);
-  }
+    // 1. Validasi user
+    const user = await this.authService.validateUser(email, password);
+    
+    if (!user) {
+      // 2. Gunakan exception standar NestJS
+      throw new UnauthorizedException('Kredensial tidak valid');
+    }
+    
+    // 3. Panggil service login yang baru
+    return this.authService.login(user);
+  }
 }
