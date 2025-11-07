@@ -13,7 +13,7 @@ export class CreatePostDto {
   content: string;
 
   @IsOptional()
-  @IsUrl()
+  @IsString()
   mediaUrl?: string;
 
   @IsNumber()
@@ -25,6 +25,6 @@ export class CreatePostDto {
   @IsOptional()
   @IsNumber()
   @Min(0)
-  @Max(1)
+  @Max(100)
   trustedScore?: number; // Nilai harus antara 0 (sangat tidak dipercaya) dan 1 (sangat dipercaya)
 }
