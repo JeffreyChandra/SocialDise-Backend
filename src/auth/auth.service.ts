@@ -15,14 +15,14 @@ export class AuthService {
   ) {}
 
   // --- REGISTRASI ---
-  async register(email: string, name: string, password: string): Promise<User> {
+  async register(email: string, password: string): Promise<User> {
     const existingUser = await this.usersRepository.findOne({ where: { email } });
     if (existingUser) {
       throw new BadRequestException('Email sudah terdaftar.');
     }
     
     // User.entity.ts memiliki @BeforeInsert untuk hashing password
-    const newUser = this.usersRepository.create({ email, name, password });
+    const newUser = this.usersRepository.create({ email, password });
     return this.usersRepository.save(newUser);
   }
 
