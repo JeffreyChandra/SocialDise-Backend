@@ -1,4 +1,3 @@
-// src/user/user.entity.ts
 import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 
@@ -10,11 +9,11 @@ export class User {
   @Column({ unique: true })
   email: string;
 
-  @Column()
-  name: string; 
+  @Column({ nullable: true })
+  name: string;
 
   @Column()
-  password: string; 
+  password: string;
 
   @BeforeInsert()
   async hashPassword() {
