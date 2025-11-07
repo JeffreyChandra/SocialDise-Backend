@@ -1,6 +1,6 @@
 // src/post/post.controller.ts
 
-import { Controller, Get, Post, Put, Delete, Body, Param, HttpCode, ParseIntPipe, Req, UseGuards, Query, Logger } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, HttpCode, ParseIntPipe, Req, UseGuards, Query } from '@nestjs/common';
 import { PostService } from './post.service';
 import { Post as PostEntity } from './post.entity';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -59,10 +59,11 @@ export class PostController {
   // ------------------------------------
   // R: READ (Berdasarkan User ID - Query Parameter)
   // ------------------------------------
-  // Endpoint: GET /posts/by-user?userId=7
-  @Get('by-user')
+  // Endpoint: POST /posts/by-user
+  @Post('by-user')
   async findPostsByUserId(@Query('userId', ParseIntPipe) userId: number): Promise<PostEntity[]> {
 
+  
     return this.postService.findAllByUserId(userId);
   }
   
