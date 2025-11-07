@@ -10,7 +10,7 @@ async function bootstrap() {
   // 1. Tambahkan Konfigurasi CORS
   app.enableCors({
     // Ganti dengan port lokal frontend Anda yang sebenarnya!
-    origin: 'http://localhost:3001', 
+    origin: 'http://localhost:3000', 
     
     // Atau, untuk mengizinkan SEMUA origin (HANYA UNTUK DEVELOPMENT LOKAL!):
     // origin: '*', 
