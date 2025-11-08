@@ -46,7 +46,7 @@ Pastikan Anda memiliki [Git](https://git-scm.com/), [Node.js](https://nodejs.org
 
 3.  Buat file `.env` di root folder frontend dan isi dengan:
     ```dotenv
-    VITE_API_BASE_URL=[https://socialdise-backend-production.up.railway.app/](https://socialdise-backend-production.up.railway.app/)
+    VITE_API_BASE_URL=https://socialdise-backend-production.up.railway.app/ 
     ```
     *(Catatan: Ini akan mengarahkan frontend lokal Anda untuk berkomunikasi dengan backend yang sudah di-deploy. Jika Anda ingin terhubung ke backend lokal Anda, ganti URL ini menjadi `http://localhost:3000`)*
 
