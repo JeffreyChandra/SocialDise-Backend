@@ -21,7 +21,7 @@ async function bootstrap() {
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true, // Penting jika Anda menggunakan cookies/session/authorization headers
   }); 
-
+  //Hanya testing
   // Mengaktifkan ValidationPipe
   app.useGlobalPipes(new ValidationPipe({ 
     transform: true, 
