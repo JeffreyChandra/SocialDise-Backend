@@ -10,7 +10,7 @@ async function bootstrap() {
   // 1. Tambahkan Konfigurasi CORS
   app.enableCors({
     // Ganti dengan port lokal frontend Anda yang sebenarnya!
-    origin: 'http://localhost:8080', 
+    origin: 'http://localhost:8080', 'https://fortunate-youthfulness-production.up.railway.app',
     
     // Atau, untuk mengizinkan SEMUA origin (HANYA UNTUK DEVELOPMENT LOKAL!):
     // origin: '*', 
