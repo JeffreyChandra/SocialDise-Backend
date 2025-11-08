@@ -1,11 +1,6 @@
 import Home from "../pages/Home";
 import { user } from "../data";
-import {
-  iconHome,
-  iconProfile,
-  iconSettings,
-  iconLogout,
-} from "../helper/assets";
+import { iconHome, iconProfile, iconLogout } from "../helper/assets";
 import { useState } from "react";
 import Profile from "../pages/Profile";
 import Settings from "../pages/Settings";

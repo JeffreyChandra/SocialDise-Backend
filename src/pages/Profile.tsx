@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import ProfilePostCard from "../components/ProfilePostCard";
-import { user, posts } from "../data";
 import API from "../api/axios";
 import { iconPerson } from "../helper/assets";
 interface User {

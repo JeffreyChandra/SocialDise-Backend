@@ -1,7 +1,7 @@
 import { useState } from "react";
 import AuthInput from "../components/AuthInput";
 import AuthInputSecure from "../components/AuthInputSecure";
-import { iconEmail, iconLock, iconPerson, iconProfile } from "../helper/assets";
+import { iconEmail, iconLock, iconPerson } from "../helper/assets";
 import API from "../api/axios";
 interface SignUpProps {
   setChoosen: React.Dispatch<React.SetStateAction<string>>;
