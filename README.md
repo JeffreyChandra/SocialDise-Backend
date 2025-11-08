@@ -106,3 +106,8 @@ Pastikan Anda memiliki [Git](https://git-scm.com/), [Node.js](https://nodejs.org
 * **Penyimpanan Media:** Cloudinary
 * **Kontainerisasi:** Docker
 * **Deployment:** Railway
+
+## Project Full:
+```bash
+https://mikroskilacid-my.sharepoint.com/:f:/g/personal/221111044_students_mikroskil_ac_id/EoaBiHB_JChFm5RgXhbBdRQB3bpVQN9gP82G85_ms35Nqg?e=uHOdK1
+```
