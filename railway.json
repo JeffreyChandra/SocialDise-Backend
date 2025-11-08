@@ -1,0 +1,12 @@
+{
+  "deployments": [
+    {
+      "name": "Backend Service",
+      "rootPath": "Proyek Backend/"
+    },
+    {
+      "name": "Frontend Service",
+      "rootPath": "Proyek Frontend/"
+    }
+  ]
+}
