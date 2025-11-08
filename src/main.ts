@@ -22,7 +22,8 @@ async function bootstrap() {
   // Mengaktifkan ValidationPipe
   app.useGlobalPipes(new ValidationPipe({ 
     transform: true, 
-    whitelist: true, 
+    whitelist: true,
+     
   })); 
   
   // Jika Anda memiliki prefix global, aktifkan di sini:

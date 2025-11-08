@@ -1,56 +1,76 @@
 // src/post/post.controller.ts
 
-import { Controller, Get, Post, Put, Delete, Body, Param, HttpCode, ParseIntPipe, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, HttpCode, ParseIntPipe, Req, UseGuards, Query } from '@nestjs/common';
 import { PostService } from './post.service';
 import { Post as PostEntity } from './post.entity';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { Request } from 'express'; 
 
-// Import AuthGuard Anda (Pastikan path ke file jwt-auth.guard.ts Anda benar)
+// Import AuthGuard Anda
 import { JwtAuthGuard } from '../auth/jwt-auth.guard'; 
 
-// Asumsi Payload JWT Anda
+// Asumsi Payload JWT dan Request
 interface JwtPayload {
-  id: number; // ID pengguna
-  username: string;
+  sub: number;
+  id: number; // Pastikan 'id' ada di payload Anda
+  username?: string;
 }
 
-interface AuthenticatedRequest extends Request {
-    user: JwtPayload; // <-- 'user' TIDAK lagi opsional karena GUARD diaktifkan
+export interface AuthenticatedRequest extends Request {
+  user: JwtPayload;
 }
 
 @Controller('posts')
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
-  // CRUD
-  
-  // AKTIVASI GUARD: Mencegah akses jika tidak ada token valid
-  @UseGuards(JwtAuthGuard) 
+  // ------------------------------------
+  // C: CREATE (Membutuhkan Otorisasi)
+  // ------------------------------------
+  @UseGuards(JwtAuthGuard) 
   @Post()
   async create(
     @Body() createPostDto: CreatePostDto,
     @Req() req: AuthenticatedRequest, 
   ): Promise<PostEntity> {
-    
-    // LOGIKA AMAN: ID pengguna (misalnya 7) DIJAMIN ada karena sudah diverifikasi oleh JwtAuthGuard
+    // Mengambil ID dari token yang terverifikasi
     const userId = req.user.id; 
-    
     return this.postService.create(createPostDto, userId);
   }
   
+  // ------------------------------------
+  // R: READ (Semua Post)
+  // ------------------------------------
   @Get()
   async findAll(): Promise<PostEntity[]> {
+    // Mengembalikan semua postingan publik
     return this.postService.findAll();
   }
+
+  // ------------------------------------
+  // R: READ (Berdasarkan Post ID)
+  // ------------------------------------
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number): Promise<PostEntity> {
     return this.postService.findOne(id);
   }
   
-  // ... endpoint lain dipertahankan ...
+  // ------------------------------------
+  // R: READ (Berdasarkan User ID - Query Parameter)
+  // ------------------------------------
+  // Endpoint: POST /posts/by-user
+  @Post('by-user')
+  async findPostsByUserId(@Body('userId', ParseIntPipe) userId: number): Promise<PostEntity[]> {
 
+  
+    return this.postService.findAllByUserId(userId);
+  }
+  
+  // ------------------------------------
+  // U & D (UPDATE & DELETE)
+  // ------------------------------------
+  // Anda mungkin ingin menambahkan @UseGuards dan validasi kepemilikan di sini!
   @Put(':id')
   async update(
     @Param('id', ParseIntPipe) id: number, 
@@ -58,13 +78,16 @@ export class PostController {
   ): Promise<PostEntity> {
     return this.postService.update(id, updateData);
   }
+  
   @Delete(':id')
   @HttpCode(204)
   async remove(@Param('id', ParseIntPipe) id: number): Promise<void> {
     await this.postService.remove(id);
   }
   
-  // FITUR LIKE (Biasanya tidak perlu otorisasi, tapi jika perlu, tambahkan @UseGuards)
+  // ------------------------------------
+  // LIKE
+  // ------------------------------------
   @Post(':id/like')
   async likePost(@Param('id', ParseIntPipe) id: number): Promise<PostEntity> {
     return this.postService.addLike(id);
