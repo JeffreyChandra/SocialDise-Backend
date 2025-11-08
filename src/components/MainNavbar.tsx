@@ -43,7 +43,7 @@ const Navbar = ({ setCurrentNav, currentNav }: Navbar) => {
   return (
     <div className="fixed flex flex-col justify-between w-[250px] h-full border-r border-divider-border px-[24px] py-[44px]">
       <div>
-        <div className="mb-[40px] ml-[14px]">NAMA APLIKASI</div>
+        <div className="mb-[40px] ml-[14px]">SOCIAL DISE</div>
         <div
           onClick={() => {
             setCurrentNav(0);

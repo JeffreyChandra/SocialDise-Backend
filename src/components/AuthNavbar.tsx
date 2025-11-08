@@ -26,7 +26,7 @@ const AuthNavbar = ({ choose }: AuthNavbarProps) => {
   return (
     <>
       <div className="bg-back w-[100%] h-[74px] border-b border-divider-border flex justify-between items-center font-semibold text-[15px] px-[29px] fixed">
-        <div>NAMA APLIKASI</div>
+        <div>SOCIAL DISE</div>
         <div className="flex justify-center items-center gap-[37px]">
           <NavItem
             text="Sign In"
