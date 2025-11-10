@@ -14,7 +14,7 @@ async function bootstrap() {
       'http://localhost:3001', // Ganti 3001 ke port lokal Anda yang benar
       'https://fortunate-youthfulness-production.up.railway.app'
     ],
-    
+    //Testing
     // Atau, untuk mengizinkan SEMUA origin (HANYA UNTUK DEVELOPMENT LOKAL!):
     // origin: '*', 
     
